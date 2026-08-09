@@ -18,6 +18,14 @@ class BankAccount:
     def balance(self):
         return self._balance
 
+    def deposit(self,amount:float):
+        if amount<=0:
+            raise ValueError("mojodi kamtar az 0 hast")
+        self._balance+=amount
+        
+        
+        
+
 
 
     
