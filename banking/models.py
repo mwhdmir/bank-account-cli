@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime
-from banking.exceptions import InsufficientFundsError, InvalidAmountError
+from banking.exceptions import (
+    InsufficientFundsError,
+    InvalidAmountError,
+    MinimumBalanceError
+)
 
 
 @dataclass
@@ -92,3 +96,48 @@ class BankAccount:
             history.append(log)
 
         return history
+
+
+class SavingsAccount(BankAccount):
+    def __init__(
+        self,
+        account_number: str,
+        owner_name: str,
+        interest_rate: float,
+        minimum_balance: float
+    ):
+        super().__init__(account_number, owner_name)
+        self.interest_rate = interest_rate
+        self.minimum_balance = minimum_balance
+
+    def withdraw(self, amount: float):
+        if amount <= 0:
+            raise InvalidAmountError("amount must be positive")
+
+        if amount > self._balance:
+         raise InsufficientFundsError("insufficient balance")
+
+        if self._balance - amount < self.minimum_balance:
+            raise MinimumBalanceError("minimum balance requirement violated")
+
+        self._balance -= amount
+
+        transaction = Transaction(
+            amount=amount,
+            transaction_type="withdraw",
+            timestamp=datetime.now()
+        )
+
+        self._transactions.append(transaction)
+
+    def apply_interest(self):
+        interest = self._balance * self.interest_rate
+        self._balance += interest
+        
+        transaction = Transaction(
+            amount=interest,
+            transaction_type="interest",
+            timestamp=datetime.now()
+        )
+
+        self._transactions.append(transaction)

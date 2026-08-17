@@ -1,18 +1,12 @@
-from banking.models import BankAccount
+from banking.models import SavingsAccount
 
-account1 = BankAccount("1001", "Ali")
-account2 = BankAccount("1002", "Sara")
+account = SavingsAccount("2001", "Ali", 0.05, 500)
 
-account1.deposit(1000)
-account1.withdraw(200)
-account1.transfer(300, account2)
+account.deposit(1000)
 
-print("Account 1 history:")
+print("Before interest:", account.balance)
 
-for log in account1.get_transaction_history():
-    print(log)
+account.apply_interest()
 
-print("\nAccount 2 history:")
-
-for log in account2.get_transaction_history():
-    print(log)
+print("After interest:", account.balance)
+print(account.get_transaction_history())
