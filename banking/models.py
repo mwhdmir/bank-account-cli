@@ -75,3 +75,20 @@ class BankAccount:
             target_account=self.account_number
         )
         target_account._transactions.append(target_transaction)
+
+    def get_transaction_history(self):
+        history = []
+
+        for transaction in self._transactions:
+            log = (
+                f"{transaction.transaction_type}: "
+                f"{transaction.amount} | "
+                f"{transaction.timestamp}"
+            )
+
+            if transaction.target_account:
+                log += f" -> {transaction.target_account}"
+
+            history.append(log)
+
+        return history
